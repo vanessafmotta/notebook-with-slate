@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback } from 'react';
+import { createEditor } from 'slate'
+import { Slate, Editable, withReact } from 'slate-react'
+import { Editor, Transforms } from 'slate'
 
-function App() {
+const initialValue = [
+  {
+    type: 'paragraph',
+    children: [{ text: 'A line of text in a paragraph.' }],
+  },
+]
+
+const App = () => {
+  const [editor] = useState(() => withReact(createEditor()))
+
+  const renderElement = useCallback(props => {
+    switch (props.element.type) {
+      case 'code':
+        return <CodeElement {...props} />
+      default:
+        return <DefaultElement {...props} />
+    }
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Slate editor={editor} value={initialValue}>
+      <Editable
+        renderElement={renderElement}
+        onKeyDown={event => {
+          if (event.key === '`' && event.ctrlKey) {
+            event.preventDefault()
+            Transforms.setNodes(
+              editor,
+              { type: 'code' },
+              { match: n => Editor.isBlock(editor, n) }
+            )
+          }
+        }}
+      />
+    </Slate>
+  )
 }
 
+const CodeElement = props => {
+  return (
+    <pre {...props.attributes}>
+      <code>{props.children}</code>
+    </pre>
+  )
+}
+
+const DefaultElement = props => {
+  return <p {...props.attributes}>{props.children}</p>
+}
 export default App;

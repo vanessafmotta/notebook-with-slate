@@ -15,13 +15,18 @@ export const Container = styled.div`
     margin-right: 8%;
     margin-left: 8%;
     border: 1px solid #3784db;
+
 `;
 
 export const Title = styled.h1`
+   @media (max-width: 768px) {
+    font-size: 22px;
+    padding: 0px 10px 0px 10px;
+  }
     color: #3784db;
 
 `;
-    
+
 export const Header = styled.div`
     display: flex;
     justify-content: center;

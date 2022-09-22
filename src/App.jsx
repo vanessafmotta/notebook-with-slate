@@ -69,11 +69,11 @@ export const CustomEditor = {
 
   toggleCodeBlock(editor) {
     const isActive = CustomEditor.isCodeBlockActive(editor)
-    
+
     Transforms.setNodes(
       editor,
-      { type: isActive ? null : 'code'},
-      { match: n => Editor.isBlock(editor, n)}
+      { type: isActive ? null : 'code' },
+      { match: n => Editor.isBlock(editor, n) }
     )
   },
 }
@@ -86,7 +86,7 @@ export const initialValue = [
 ];
 
 
-const App = ({onChange}) => {
+const App = ({ onChange }) => {
   const [editor] = useState(() => withReact(createEditor()));
 
   const renderElement = useCallback(props => {
@@ -103,77 +103,77 @@ const App = ({onChange}) => {
   }, [])
 
   return (
-    <Slate editor={editor} value={initialValue}>
-      <S.Header>
-        <button
-          onMouseDown={e => {
+    <Slate editor={editor} value={initialValue} >
+      <S.Container>
+        <S.Title>Crie suas anotações</S.Title>
+        <S.Header>
+          <S.Button onMouseDown={e => {
             e.preventDefault()
             CustomEditor.toggleBoldMark(editor)
           }}
-        
-        >
-         <FaBold/>
-        </button>
-        <button
-          onMouseDown={e => {
-            e.preventDefault()
-            CustomEditor.toggleItalicMark(editor)
-          }}
-        >
-          <FaItalic/>
-        </button>
-        <button
-          onMouseDown={e => {
-            e.preventDefault()
-            CustomEditor.toggleCodeBlock(editor)
-          }}
-        >
-          <FaCode/>
-        </button>
-        <button
-        onMouseDown={e => {
-          e.preventDefault()
-          CustomEditor.toggleUnderlineMark(editor)
-        }}
-      >
-        <FaUnderline/>
-      </button>
-      </S.Header>
-      <Editable 
-            renderElement={renderElement}
-            renderLeaf={renderLeaf}
-            onKeyDown={e => {
-              if(!e.ctrlKey) {
-                return
+          >
+            <FaBold style={{ color: "#3784db" }} />
+          </S.Button>
+          <S.Button
+            onMouseDown={e => {
+              e.preventDefault()
+              CustomEditor.toggleItalicMark(editor)
+            }}
+          >
+            <FaItalic style={{ color: "#3784db" }} />
+          </S.Button>
+          <S.Button
+            onMouseDown={e => {
+              e.preventDefault()
+              CustomEditor.toggleCodeBlock(editor)
+            }}
+          >
+            <FaCode style={{ color: "#3784db" }} />
+          </S.Button>
+          <S.Button
+            onMouseDown={e => {
+              e.preventDefault()
+              CustomEditor.toggleUnderlineMark(editor)
+            }}
+          ><FaUnderline style={{ color: "#3784db" }} />
+          </S.Button>
+        </S.Header>
+        <Editable
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          onKeyDown={e => {
+            if (!e.ctrlKey) {
+              return
+            }
+            // eslint-disable-next-line default-case
+            switch (e.key) {
+              case 'p': {
+                e.preventDefault();
+                CustomEditor.toggleCodeBlock(editor);
+                break
               }
-              // eslint-disable-next-line default-case
-              switch (e.key) {
-                case 'p': {
-                  e.preventDefault();
-                  CustomEditor.toggleCodeBlock(editor);
-                  break
-                }
-                case 'b': {
-                  e.preventDefault()
-                  CustomEditor.toggleBoldMark(editor);
-                  break
-                }
-                case 'i': {
-                  e.preventDefault()
-                  CustomEditor.toggleItalicMark(editor);
-                  break
-                }
+              case 'b': {
+                e.preventDefault()
+                CustomEditor.toggleBoldMark(editor);
+                break
+              }
+              case 'i': {
+                e.preventDefault()
+                CustomEditor.toggleItalicMark(editor);
+                break
               }
             }
           }
-          />
-        </Slate>
+          }
+        />
+      </S.Container>
+    </Slate>
   )
 }
 const CodeElement = props => {
   return (
     <pre {...props.attributes}>
-      <code style={{ background: 'var(--gray)', border: '1px solid #cdcdcc' }}>{props.children}</code>
+      <code style={{ background: 'var(--gray)', border: '1px solid #cdcccd' }}>{props.children}</code>
     </pre>
   )
 }
@@ -187,7 +187,7 @@ const Leaf = props => {
     <span
       {...props.attributes}
       style={
-        { 
+        {
           fontWeight: props.leaf.bold ? 'bold' : 'normal',
           fontStyle: props.leaf.italic ? 'italic' : 'normal',
           textDecoration: props.leaf.underline ? 'underline' : 'normal'

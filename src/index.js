@@ -5,7 +5,7 @@ import{BrowserRouter} from 'react-router-dom'
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <App style={{ background: "#3784db" }} />
   </BrowserRouter>,
   document.getElementById('root')
 );
